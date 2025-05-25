@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Warung Makan Lezat</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  body {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    min-height: 100vh;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    background: #fff8f0;
+    width: 100%;
+    padding: 2rem 1rem;
+    box-shadow: 0 4px 8px rgba(252, 182, 159, 0.3);
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    animation: slideDown 1s ease forwards;
+  }
+  header h1 {
+    font-size: 2.5rem;
+    color: #d14124;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  header p {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #7a4a36;
+  }
+  main {
+    max-width: 1200px;
+    margin: 2rem 1rem 4rem;
+    width: 100%;
+  }
+  section.menu {
+    margin-top: 3rem;
+  }
+  section.menu h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #d14124;
+    border-bottom: 3px solid #d14124;
+    padding-bottom: 0.5rem;
+    width: fit-content;
+  }
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+  .card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(252, 182, 159, 0.3);
+    cursor: pointer;
+    transform: translateY(30px);
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  .card:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .card:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+  .card:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+  .card:nth-child(4) {
+    animation-delay: 0.7s;
+  }
+  .card:nth-child(5) {
+    animation-delay: 0.9s;
+  }
+  .card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .card:hover img {
+    transform: scale(1.08) rotate(2deg);
+  }
+  .card-content {
+    padding: 1rem;
+  }
+  .card-content h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.3rem;
+    color: #d14124;
+  }
+  .card-content p {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 1rem;
+    min-height: 48px;
+  }
+  .card-content .price {
+    font-weight: 700;
+    color: #d14124;
+    font-size: 1.2rem;
+  }
+  /* Footer */
+  footer {
+    width: 100%;
+    background: #fff8f0;
+    padding: 1rem 0;
+    text-align: center;
+    color: #7a4a36;
+    font-size: 1rem;
+    box-shadow: 0 -4px 8px rgba(252, 182, 159, 0.3);
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Warung Makan Lezat</h1>
+  <p>Makanan Tradisional & Modern yang Menggugah Selera</p>
+</header>
+<main>
+  <section class="menu" aria-label="Daftar Menu Makanan">
+    <h2>Menu Pilihan</h2>
+    <div class="cards-container">
+      <article class="card" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=60" alt="Nasi Goreng Spesial" />
+        <div class="card-content">
+          <h3>Nasi Goreng Spesial</h3>
+          <p>Nasi goreng dengan bumbu khas, telur, dan potongan ayam yang gurih.</p>
+          <div class="price">Rp 25.000</div>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=60" alt="Sate Ayam Madura" />
+        <div class="card-content">
+          <h3>Sate Ayam Madura</h3>
+          <p>Potongan ayam panggang dengan bumbu kacang khas Madura.</p>
+          <div class="price">Rp 30.000</div>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <img src="https://www.google.com/imgres?q=mie%20sedaap&imgurl=https%3A%2F%2Fgopos.id%2Fwp-content%2Fuploads%2F2023%2F10%2Fmie-sedaap.jpg&imgrefurl=https%3A%2F%2Fgopos.id%2Fini-dia-beberapa-varian-mie-sedaap%2F&docid=OaknfqIrXsvjNM&tbnid=8bWl9BrsJepqRM&vet=12ahUKEwivtsj857-NAxW8RmwGHeHvGzAQM3oFCIIBEAA..i&w=1245&h=685&hcb=2&ved=2ahUKEwivtsj857-NAxW8RmwGHeHvGzAQM3oFCIIBEAA" />
+        <div class="card-content">
+          <h3>Mie Rebus Jawa</h3>
+          <p>Mie kuah dengan sayuran segar dan daging ayam suwir.</p>
+          <div class="price">Rp 20.000</div>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <img src="https://www.google.com/imgres?q=gado%20gado&imgurl=https%3A%2F%2Fawsimages.detik.net.id%2Fcommunity%2Fmedia%2Fvisual%2F2024%2F02%2F14%2Fresep-gado-gado-siram.jpeg%3Fw%3D1200&imgrefurl=https%3A%2F%2Ffood.detik.com%2Fsayur%2Fd-7192751%2Fresep-gado-gado-siram-yang-isiannya-sayuran-komplet&docid=GC7E9F3ax69HrM&tbnid=j9JLL8Ys23PYoM&vet=12ahUKEwiOw-Sg6L-NAxXwxjgGHZH3BGcQM3oECBsQAA..i&w=1200&h=989&hcb=2&ved=2ahUKEwiOw-Sg6L-NAxXwxjgGHZH3BGcQM3oECBsQAA" />
+        <div class="card-content">
+          <h3>Gado-Gado</h3>
+          <p>Salad sayur segar disiram saus kacang pedas manis.</p>
+          <div class="price">Rp 22.000</div>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <img src="https://www.google.com/imgres?q=es%20teh&imgurl=https%3A%2F%2Fnilaigizi.com%2Fassets%2Fimages%2Fproduk%2Fproduk_1578041377.jpg&imgrefurl=https%3A%2F%2Fnilaigizi.com%2Fgizi%2Fdetailproduk%2F1249%2Fes-teh-manis&docid=uJqjvljeI5JhaM&tbnid=2Cv-T512zEd2VM&vet=12ahUKEwjE68zC6L-NAxXan2MGHUviCyEQM3oECB4QAA..i&w=700&h=700&hcb=2&ved=2ahUKEwjE68zC6L-NAxXan2MGHUviCyEQM3oECB4QAA" />
+        <div class="card-content">
+          <h3>Es Teh Manis</h3>
+          <p>Minuman segar teh manis dingin, cocok untuk menemani makan.</p>
+          <div class="price">Rp 8.000</div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+<footer>
+  &copy; 2024 Warung Makan Lezat - Selera Anda Prioritas Kami
+</footer>
+</body>
+</html>
+
