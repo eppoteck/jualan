@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<titl>pengeluaran rifqi</title>
+<title>Aplikasi Catatan Pengeluaran</title>
 <style>
   /* Reset and base styles */
   * {
@@ -133,7 +133,20 @@
     color: #b3a7d4cc;
     font-style: italic;
   }
-  
+  .actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .actions button {
+    flex: 1;
+    background: #3182ce;
+    box-shadow: 0 6px 12px #2b6cb0aa;
+  }
+  .actions button:hover {
+    background-color: #2b6cb0;
+  }
   /* Scrollbar styling for expenses list */
   .expenses-list::-webkit-scrollbar {
     width: 8px;
@@ -145,6 +158,9 @@
   .expenses-list::-webkit-scrollbar-track {
     background: transparent;
   }
+  input[type="file"] {
+    display: none;
+  }
 
   @keyframes fadeIn {
     from {opacity: 0; transform: translateX(-10px);}
@@ -154,8 +170,8 @@
 </head>
 <body>
 <header>
-  <h1>Catatan Pengeluaran rifqi</h1>
-  <p>Rekam dan kelola pengeluaranmu</p>
+  <h1>Catatan Pengeluaran</h1>
+  <p>Rekam dan kelola pengeluaranmu dengan mudah</p>
 </header>
 <main>
   <form id="expense-form" aria-label="Form tambah pengeluaran">
@@ -170,6 +186,11 @@
   <section class="expenses-list" aria-live="polite" aria-label="Daftar pengeluaran">
     <!-- List items get inserted here -->
   </section>
+  <div class="actions">
+    <button id="export-btn" aria-label="Ekspor data pengeluaran">Ekspor Data</button>
+    <button id="import-btn" aria-label="Impor data pengeluaran">Impor Data</button>
+    <input type="file" id="import-file" accept="application/json" />
+  </div>
 </main>
 
 <script>
@@ -178,6 +199,9 @@
     const descInput = document.getElementById('desc');
     const amountInput = document.getElementById('amount');
     const expensesList = document.querySelector('.expenses-list');
+    const exportBtn = document.getElementById('export-btn');
+    const importBtn = document.getElementById('import-btn');
+    const importFileInput = document.getElementById('import-file');
 
     // Load expenses from localStorage or empty array
     let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
@@ -251,6 +275,59 @@
       renderExpenses();
       form.reset();
       descInput.focus();
+    });
+
+    // Export expenses data as JSON file
+    exportBtn.addEventListener('click', () => {
+      if (expenses.length === 0) {
+        alert("Tidak ada data pengeluaran untuk diekspor.");
+        return;
+      }
+      const blob = new Blob([JSON.stringify(expenses, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pengeluaran-' + new Date().toISOString().slice(0,10) + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Trigger hidden file input when import button is clicked
+    importBtn.addEventListener('click', () => {
+      importFileInput.click();
+    });
+
+    // Handle import file selection
+    importFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const importedExpenses = JSON.parse(event.target.result);
+          if (!Array.isArray(importedExpenses)) {
+            alert('Format file tidak valid, harus berupa array data.');
+            return;
+          }
+          // Validate each item object structure
+          for (const item of importedExpenses) {
+            if (typeof item.description !== 'string' || typeof item.amount !== 'number' || item.amount <= 0) {
+              alert('Format data pengeluaran tidak valid.');
+              return;
+            }
+          }
+          // Overwrite current expenses with imported data
+          expenses = importedExpenses;
+          saveExpenses();
+          renderExpenses();
+          alert('Data pengeluaran berhasil diimpor.');
+          importFileInput.value = '';
+        } catch(err) {
+          alert('Gagal membaca file. Pastikan file JSON valid.');
+          importFileInput.value = '';
+        }
+      };
+      reader.readAsText(file);
     });
 
     // Initial render
