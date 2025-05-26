@@ -90,28 +90,37 @@
     background: #483d8bbb;
     border-radius: 12px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 1rem 1.5rem;
-    align-items: center;
     margin-bottom: 0.8rem;
     box-shadow: 0 6px 12px rgba(72,61,139,0.3);
     animation: fadeIn 0.6s ease forwards;
   }
-  .expense-item span {
-    font-size: 1.1rem;
+  .expense-toprow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .expense-desc {
-    flex: 1;
-    margin-right: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     color: #dcd6f7;
+    font-size: 1.15rem;
   }
   .expense-amount {
     font-weight: 700;
     color: #f6e05e;
-    width: 90px;
-    text-align: right;
+    font-size: 1.15rem;
     white-space: nowrap;
+  }
+  .expense-bottomrow {
+    margin-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .expense-date {
+    font-size: 0.85rem;
+    color: #b3a7d4cc;
   }
   .delete-btn {
     background: #e53e3e;
@@ -211,7 +220,19 @@
       return 'Rp ' + Number(num).toLocaleString('id-ID');
     }
 
-    // Render the list of expenses
+    // Format date to "dd-mm-yyyy hh:mm" Indonesian style
+    function formatDate(timestamp) {
+      const date = new Date(timestamp);
+      const pad = (n) => n.toString().padStart(2, '0');
+      const day = pad(date.getDate());
+      const month = pad(date.getMonth() + 1);
+      const year = date.getFullYear();
+      const hours = pad(date.getHours());
+      const minutes = pad(date.getMinutes());
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
+    }
+
+    // Render the list of expenses with date/time included
     function renderExpenses() {
       expensesList.innerHTML = '';
       if (expenses.length === 0) {
@@ -225,17 +246,25 @@
         const expenseItem = document.createElement('div');
         expenseItem.className = 'expense-item';
         expenseItem.setAttribute('tabindex', '0');
-        // Description
+        // Top row: description and amount with delete button
+        const topRow = document.createElement('div');
+        topRow.className = 'expense-toprow';
+
         const descSpan = document.createElement('span');
         descSpan.className = 'expense-desc';
         descSpan.textContent = expense.description;
-        expenseItem.appendChild(descSpan);
-        // Amount
+        topRow.appendChild(descSpan);
+
+        const amountAndDelete = document.createElement('div');
+        amountAndDelete.style.display = 'flex';
+        amountAndDelete.style.alignItems = 'center';
+        amountAndDelete.style.gap = '0.8rem';
+
         const amountSpan = document.createElement('span');
         amountSpan.className = 'expense-amount';
         amountSpan.textContent = formatRupiah(expense.amount);
-        expenseItem.appendChild(amountSpan);
-        // Delete button
+        amountAndDelete.appendChild(amountSpan);
+
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'delete-btn';
         deleteBtn.setAttribute('aria-label', 'Hapus pengeluaran ' + expense.description);
@@ -243,7 +272,21 @@
         deleteBtn.addEventListener('click', () => {
           removeExpense(index);
         });
-        expenseItem.appendChild(deleteBtn);
+        amountAndDelete.appendChild(deleteBtn);
+
+        topRow.appendChild(amountAndDelete);
+        expenseItem.appendChild(topRow);
+
+        // Bottom row: date and time
+        const bottomRow = document.createElement('div');
+        bottomRow.className = 'expense-bottomrow';
+
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'expense-date';
+        dateSpan.textContent = formatDate(expense.timestamp);
+        bottomRow.appendChild(dateSpan);
+
+        expenseItem.appendChild(bottomRow);
 
         expensesList.appendChild(expenseItem);
       });
@@ -270,7 +313,8 @@
         alert('Mohon isi deskripsi dan jumlah pengeluaran yang valid!');
         return;
       }
-      expenses.push({description, amount});
+      const timestamp = Date.now();
+      expenses.push({description, amount, timestamp});
       saveExpenses();
       renderExpenses();
       form.reset();
@@ -311,7 +355,7 @@
           }
           // Validate each item object structure
           for (const item of importedExpenses) {
-            if (typeof item.description !== 'string' || typeof item.amount !== 'number' || item.amount <= 0) {
+            if (typeof item.description !== 'string' || typeof item.amount !== 'number' || item.amount <= 0 || typeof item.timestamp !== 'number') {
               alert('Format data pengeluaran tidak valid.');
               return;
             }
@@ -337,4 +381,3 @@
 
 </body>
 </html>
-
